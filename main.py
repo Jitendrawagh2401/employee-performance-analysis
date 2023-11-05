@@ -18,10 +18,16 @@ else:
     st.error("Incorrect password. Please enter the correct password to upload a file.")
 
 if access_granted:
-   uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+   uploaded_file = st.file_uploader("Upload a CSV or Excel file", type=["csv", "xlsx"])
 if uploaded_file is not None:
-    # Read the uploaded CSV file
-    df = pd.read_csv(uploaded_file)
+    file_extension = uploaded_file.name.split('.')[-1].lower()  # Extract the file extension
+
+    if file_extension == 'csv':
+        df = pd.read_csv(uploaded_file)
+    elif file_extension == 'xlsx':
+        df = pd.read_excel(uploaded_file)
+    else:
+        st.error("Unsupported file format. Please upload a CSV or Excel file.")
 
     # Sidebar filters
     st.sidebar.header('Filters')
@@ -213,3 +219,4 @@ if menu == "Graph Analysis":
 
 # Add your code for creating and displaying graphs here
 # (Code for creating and displaying graphs can be added here)
+
